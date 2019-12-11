@@ -23,17 +23,49 @@ module CrossedWires
     attr_reader :points
 
     def horizontal_parts
-      points.each_cons(2)
+      @horizontal_parts ||= points.each_cons(2)
         .select { _1.y == _2.y }
         .sort_by { |first, _| first.y }
         .map { WirePart.new(*[_1, _2].sort) }
     end
 
     def vertical_parts
-      points.each_cons(2)
+      @vertical_parts ||= points.each_cons(2)
         .select { _1.x == _2.x }
         .sort_by { |first, _| first.x }
         .map { WirePart.new(*[_1, _2].sort) }
+    end
+
+    def intersections(wire)
+      intersections = [
+        *find_intersections(
+          horizontals: horizontal_parts,
+          verticals: wire.vertical_parts
+        ),
+        *find_intersections(
+          horizontals: wire.horizontal_parts,
+          verticals: vertical_parts
+        )
+      ]
+
+      intersections.reject { _1.x == 0 && _1.y == 0 }
+    end
+
+    def find_intersections(horizontals:, verticals:)
+      horizontals.flat_map do |part|
+        verticals
+          .select(&covers_x?(part))
+          .select(&covers_y?(part))
+          .map { Point.new(_1.begining.x, part.begining.y) }
+      end
+    end
+
+    def covers_x?(horizontal)
+      ->(vertical) { (horizontal.begining.x..horizontal.end.x).cover?(vertical.begining.x) }
+    end
+
+    def covers_y?(horizontal)
+      ->(vertical) { (vertical.begining.y..vertical.end.y).cover?(horizontal.begining.y) }
     end
 
     class InputParser

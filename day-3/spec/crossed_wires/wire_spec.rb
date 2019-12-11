@@ -60,8 +60,8 @@ RSpec.describe CrossedWires::Wire do
             expect(vertical_parts).to match_array [
               have_attributes(begining: have_attributes(x: -4, y: -5),
                               end: have_attributes(x: -4, y: 0)),
-            have_attributes(begining: have_attributes(x: 6, y: -5),
-                            end: have_attributes(x: 6, y: 5))
+              have_attributes(begining: have_attributes(x: 6, y: -5),
+                              end: have_attributes(x: 6, y: 5))
             ]
           end
         end
@@ -142,6 +142,55 @@ RSpec.describe CrossedWires::Wire do
             have_attributes(x: -6, y: -5)
           ]
         end
+      end
+    end
+  end
+
+  describe '#intersections' do
+    let(:wire_alfa) do
+      CrossedWires::Wire.new(
+        [
+          CrossedWires::Point.new(0, 0),
+          CrossedWires::Point.new(0, 30),
+          CrossedWires::Point.new(40, 30),
+          CrossedWires::Point.new(40, 10),
+          CrossedWires::Point.new(20, 10),
+          CrossedWires::Point.new(20, 50)
+        ]
+      )
+    end
+
+    let(:wire_bravo) do
+      CrossedWires::Wire.new(
+        [
+          CrossedWires::Point.new(0, 0),
+          CrossedWires::Point.new(50, 0),
+          CrossedWires::Point.new(50, 40),
+          CrossedWires::Point.new(10, 40),
+          CrossedWires::Point.new(10, 30)
+        ]
+      )
+    end
+
+    context 'case 1' do
+      subject { wire_alfa.intersections(wire_bravo) }
+
+      it 'returns intersection points' do
+        is_expected.to contain_exactly(
+          CrossedWires::Point.new(20, 40),
+          CrossedWires::Point.new(10, 30)
+        )
+      end
+    end
+
+    context 'case 2' do
+      subject { wire_bravo.intersections(wire_alfa) }
+
+      it 'returns intersection points' do
+        is_expected.to contain_exactly(
+          CrossedWires::Point.new(20, 40),
+          CrossedWires::Point.new(10, 30)
+        )
       end
     end
   end
