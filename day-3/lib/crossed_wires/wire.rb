@@ -6,6 +6,10 @@ module CrossedWires
 
       y <=> other.y
     end
+
+    def distance
+      x.abs + y.abs
+    end
   end
 
   WirePart = Struct.new(:begining, :end)
