@@ -5,27 +5,58 @@ module CrossedWires
 
   class Wire < SimpleDelegator
     def self.from_input(input)
-      starting_point = Point.new(0, 0)
+      points = InputParser.new.extract_points(input)
+      new(points)
+    end
 
-      wire = input.split(',').reduce([starting_point]) do |result, path|
-        direction = path[0...1]
-        length = path[1..-1].to_i
+    class InputParser
+      def extract_points(input)
+        movements = extract_movements(input)
 
-        last_point = result.last
-
-        next_point = case direction
-                     when 'U' then Point.new(last_point.x, last_point.y + length)
-                     when 'D' then Point.new(last_point.x, last_point.y - length)
-                     when 'R' then Point.new(last_point.x + length, last_point.y)
-                     when 'L' then Point.new(last_point.x - length, last_point.y)
-                     else raise "Unknown direction: #{direction.inspect}"
-                     end
-
-
-        result.push(next_point)
+        starting_point = Point.new(0, 0)
+        movements.reduce([starting_point]) do |result, movement|
+          next_point = movement.call(result.last)
+          result.push(next_point)
+        end
       end
 
-      new(wire)
+      private
+
+      def extract_movements(input)
+        input.split(',')
+          .map { extract_movement(_1) }
+      end
+
+      def extract_movement(input_move)
+        direction = input_move[0...1]
+        distance = input_move[1..-1].to_i
+
+        movement = case direction
+                   when 'U' then to_up
+                   when 'D' then to_down
+                   when 'R' then to_right
+                   when 'L' then to_left
+                   else raise "Unknown direction: #{direction.inspect}"
+                   end
+
+        movement.curry[distance]
+      end
+
+      def to_left
+        ->(distance, start) { Point.new(start.x - distance, start.y) }
+      end
+
+      def to_right
+        ->(distance, start) { Point.new(start.x + distance, start.y) }
+      end
+
+      def to_up
+        ->(distance, start) { Point.new(start.x, start.y + distance) }
+      end
+
+      def to_down
+        ->(distance, start) { Point.new(start.x, start.y - distance) }
+      end
     end
   end
 end
