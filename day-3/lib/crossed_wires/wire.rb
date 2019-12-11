@@ -1,7 +1,15 @@
 require 'delegate'
 
 module CrossedWires
-  Point = Struct.new(:x, :y)
+  Point = Struct.new(:x, :y) do
+    def <=>(other)
+      x_comparison = x <=> other.x
+      return x_comparison unless x_comparison.zero?
+
+      y <=> other.y
+    end
+  end
+  WirePart = Struct.new(:begining, :end)
 
   class Wire < SimpleDelegator
     def self.from_input(input)
@@ -11,6 +19,13 @@ module CrossedWires
 
     def points
       __getobj__
+    end
+
+    def horizontal_parts
+      points.each_cons(2)
+        .select { _1.y == _2.y }
+        .sort_by { |first, _| first.y }
+        .map { WirePart.new(*[_1, _2].sort) }
     end
 
     class InputParser

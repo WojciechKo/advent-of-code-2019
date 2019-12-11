@@ -4,6 +4,37 @@ RSpec.describe CrossedWires::Wire do
   describe '::from_input' do
     subject(:instance) { described_class.from_input(input) }
 
+    describe '#horizontal_parts' do
+      subject(:horizontal_parts) { instance.horizontal_parts }
+      describe 'returns sorted parts' do
+        context 'case 1' do
+          let(:input) { 'U5,R4,D10,L10' }
+
+          it 'return horizontal parts of wire' do
+            expect(horizontal_parts).to match_array [
+              have_attributes(begining: have_attributes(x: -6, y: -5),
+                              end: have_attributes(x: 4, y: -5)),
+              have_attributes(begining: have_attributes(x: 0, y: 5),
+                              end: have_attributes(x: 4, y: 5))
+            ]
+          end
+        end
+
+        context 'case 2' do
+          let(:input) { 'L4,D5,R10,U10' }
+
+          it 'return horizontal parts of wire' do
+            expect(horizontal_parts).to match_array [
+              have_attributes(begining: have_attributes(x: -4, y: -5),
+                              end: have_attributes(x: 6, y: -5)),
+              have_attributes(begining: have_attributes(x: -4, y: 0),
+                              end: have_attributes(x: 0, y: 0))
+            ]
+          end
+        end
+      end
+    end
+
     describe '#points' do
       subject(:points) { instance.points }
 
