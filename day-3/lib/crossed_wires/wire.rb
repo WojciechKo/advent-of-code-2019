@@ -9,6 +9,10 @@ module CrossedWires
       new(points)
     end
 
+    def points
+      __getobj__
+    end
+
     class InputParser
       def extract_points(input)
         movements = extract_movements(input)
