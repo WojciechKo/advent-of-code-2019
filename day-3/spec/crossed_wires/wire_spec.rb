@@ -10,10 +10,8 @@ RSpec.describe CrossedWires::Wire do
 
         it 'creates a correct wire' do
           expect(wire).to match_array [
-            have_attributes(
-              begining: have_attributes(x: 0, y: 0),
-              end: have_attributes(x: 0, y: 62)
-            )
+            have_attributes(x: 0, y: 0),
+            have_attributes(x: 0, y: 62)
           ]
         end
       end
@@ -23,10 +21,8 @@ RSpec.describe CrossedWires::Wire do
 
         it 'creates a correct wire' do
           expect(wire).to match_array [
-            have_attributes(
-              begining: have_attributes(x: 0, y: 0),
-              end: have_attributes(x: 0, y: -20)
-            )
+            have_attributes(x: 0, y: 0),
+            have_attributes(x: 0, y: -20)
           ]
         end
       end
@@ -36,10 +32,8 @@ RSpec.describe CrossedWires::Wire do
 
         it 'creates a correct wire' do
           expect(wire).to match_array [
-            have_attributes(
-              begining: have_attributes(x: 0, y: 0),
-              end: have_attributes(x: 5, y: 0)
-            )
+            have_attributes(x: 0, y: 0),
+            have_attributes(x: 5, y: 0)
           ]
         end
       end
@@ -49,12 +43,24 @@ RSpec.describe CrossedWires::Wire do
 
         it 'creates a correct wire' do
           expect(wire).to match_array [
-            have_attributes(
-              begining: have_attributes(x: 0, y: 0),
-              end: have_attributes(x: -1, y: 0)
-            )
+            have_attributes(x: 0, y: 0),
+            have_attributes(x: -1, y: 0)
           ]
         end
+      end
+    end
+
+    context 'with multiple paths' do
+      let(:input) { 'U5,R4,D10,L10' }
+
+      it 'creates a correct wire' do
+        expect(wire).to match_array [
+          have_attributes(x: 0, y: 0),
+          have_attributes(x: 0, y: 5),
+          have_attributes(x: 4, y: 5),
+          have_attributes(x: 4, y: -5),
+          have_attributes(x: -6, y: -5)
+        ]
       end
     end
   end
