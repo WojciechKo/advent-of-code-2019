@@ -6,7 +6,18 @@ module CrossedWires
 
   class Wire < SimpleDelegator
     def self.from_input(input)
-      new([WirePart.new(Point.new(0,0), Point.new(0,62))])
+      direction = input[0...1]
+      length = input[1..-1].to_i
+
+      start_point = Point.new(0, 0)
+
+      next_point = case direction
+                   when 'U' then Point.new(start_point.x, start_point.y + length)
+                   when 'D' then Point.new(start_point.x, start_point.y - length)
+                   else raise "Unknown direction: #{direction.inspect}"
+                   end
+
+      new([WirePart.new(start_point, next_point)])
     end
   end
 end
