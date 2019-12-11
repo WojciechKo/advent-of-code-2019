@@ -1,5 +1,3 @@
-require 'delegate'
-
 module CrossedWires
   Point = Struct.new(:x, :y) do
     def <=>(other)
@@ -9,22 +7,32 @@ module CrossedWires
       y <=> other.y
     end
   end
+
   WirePart = Struct.new(:begining, :end)
 
-  class Wire < SimpleDelegator
+  class Wire
     def self.from_input(input)
       points = InputParser.new.extract_points(input)
       new(points)
     end
 
-    def points
-      __getobj__
+    def initialize(points)
+      @points = points
     end
+
+    attr_reader :points
 
     def horizontal_parts
       points.each_cons(2)
         .select { _1.y == _2.y }
         .sort_by { |first, _| first.y }
+        .map { WirePart.new(*[_1, _2].sort) }
+    end
+
+    def vertical_parts
+      points.each_cons(2)
+        .select { _1.x == _2.x }
+        .sort_by { |first, _| first.x }
         .map { WirePart.new(*[_1, _2].sort) }
     end
 
