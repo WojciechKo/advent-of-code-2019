@@ -30,6 +30,32 @@ RSpec.describe CrossedWires::Wire do
           ]
         end
       end
+
+      context 'rightwards' do
+        let(:input) { 'R5' }
+
+        it 'creates a correct wire' do
+          expect(wire).to match_array [
+            have_attributes(
+              begining: have_attributes(x: 0, y: 0),
+              end: have_attributes(x: 5, y: 0)
+            )
+          ]
+        end
+      end
+
+      context 'leftwards' do
+        let(:input) { 'L1' }
+
+        it 'creates a correct wire' do
+          expect(wire).to match_array [
+            have_attributes(
+              begining: have_attributes(x: 0, y: 0),
+              end: have_attributes(x: -1, y: 0)
+            )
+          ]
+        end
+      end
     end
   end
 end

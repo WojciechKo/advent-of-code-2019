@@ -14,6 +14,8 @@ module CrossedWires
       next_point = case direction
                    when 'U' then Point.new(start_point.x, start_point.y + length)
                    when 'D' then Point.new(start_point.x, start_point.y - length)
+                   when 'R' then Point.new(start_point.x + length, start_point.y)
+                   when 'L' then Point.new(start_point.x - length, start_point.y)
                    else raise "Unknown direction: #{direction.inspect}"
                    end
 
