@@ -42,6 +42,15 @@ module CrossedWires
         begining.y == ending.y
       end
 
+      def cover?(point)
+        x_range.cover?(point.x) && y_range.cover?(point.y)
+      end
+
+      def length
+        (begining.x - ending.x).abs +
+          (begining.y - ending.y).abs
+      end
+
       def x_range
         Range.new(*[begining.x, ending.x].sort)
       end
