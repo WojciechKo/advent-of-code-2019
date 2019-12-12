@@ -30,4 +30,20 @@ RSpec.describe SecureContainer do
       end
     end
   end
+
+  describe '::part_2' do
+    subject { described_class.part_2(input) }
+
+    context 'with input file' do
+      let(:input) { File.read('input') }
+
+      it 'writes output to the file' do
+        File.write('output-part2', subject)
+      end
+
+      it 'checks if the result is correct' do
+        expect(subject).to eq(1172)
+      end
+    end
+  end
 end

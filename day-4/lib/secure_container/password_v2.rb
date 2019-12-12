@@ -1,17 +1,17 @@
 module SecureContainer
-  class Password
+  class PasswordV2
     def initialize(password)
       @password = password.split('')
     end
 
     def valid?
-      two_adjacent_digits_the_same? && increasing?
+      increasing? && exactly_two_adjacent_digits_the_same?
     end
 
     private
 
-    def two_adjacent_digits_the_same?
-      @password.each_cons(2).any? { _1 == _2 }
+    def exactly_two_adjacent_digits_the_same?
+      @password.tally.values.any?(2)
     end
 
     def increasing?
