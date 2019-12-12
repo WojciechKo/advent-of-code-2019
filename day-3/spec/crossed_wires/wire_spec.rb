@@ -83,4 +83,27 @@ RSpec.describe CrossedWires::Wire do
       end
     end
   end
+
+  describe '#steps_to' do
+    subject(:steps_to) { wire.steps_to(point) }
+
+    context 'wire alfa' do
+      let(:points) { points_alfa }
+
+      context 'with point {0,5}' do
+        let(:point) { CrossedWires::Point.new(0, 5) }
+        it { is_expected.to eq(5) }
+      end
+
+      context 'with point {0,2}' do
+        let(:point) { CrossedWires::Point.new(0, 2) }
+        it { is_expected.to eq(2) }
+      end
+
+      context 'with point {2,5}' do
+        let(:point) { CrossedWires::Point.new(2, 5) }
+        it { is_expected.to eq(7) }
+      end
+    end
+  end
 end

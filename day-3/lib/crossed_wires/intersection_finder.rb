@@ -23,10 +23,23 @@ module CrossedWires
         .min
     end
 
+    def distance_to_the_closest_by_steps(*wires)
+      all_intersections(*wires)
+        .map!(&step_distance(*wires))
+        .min
+    end
+
     private
 
     def manhattan_distance
       ->(point) { point.x.abs + point.y.abs }
+    end
+
+    def step_distance(*wires)
+      lambda do |point|
+        wires.map { |wire| wire.steps_to(point) }
+          .sum
+      end
     end
 
     def find_intersections(horizontals:, verticals:)

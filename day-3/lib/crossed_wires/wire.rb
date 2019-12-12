@@ -7,15 +7,24 @@ module CrossedWires
 
     attr_reader :points, :horizontal_sections, :vertical_sections
 
+    def steps_to(point)
+      @sections.reduce(0) do |sum, section|
+        break sum + section.begining.distance(point) if section.cover?(point)
+
+        sum + section.length
+      end
+    end
+
     private
 
     def initialize_sections!
       @horizontal_sections = []
       @vertical_sections = []
 
-      @points.each_cons(2)
+      @sections = @points.each_cons(2)
         .map { WireSection.new(_1, _2) }
-        .each do |wire_section|
+
+      @sections.each do |wire_section|
         if wire_section.vertical?
           @vertical_sections << wire_section
         elsif wire_section.horizontal?
@@ -47,8 +56,7 @@ module CrossedWires
       end
 
       def length
-        (begining.x - ending.x).abs +
-          (begining.y - ending.y).abs
+        (begining.x - ending.x).abs + (begining.y - ending.y).abs
       end
 
       def x_range

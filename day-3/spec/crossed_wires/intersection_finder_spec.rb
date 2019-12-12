@@ -75,4 +75,24 @@ RSpec.describe CrossedWires::IntersectionFinder do
       end
     end
   end
+
+  describe '#distance_to_the_closest_by_steps' do
+    subject(:distance_to_the_closest_by_steps) { finder.distance_to_the_closest_by_steps(*wires) }
+
+    context 'first alfa then bravo' do
+      let(:wires) { [wire_alfa, wire_bravo] }
+
+      it 'returns distance to the intersection' do
+        expect(distance_to_the_closest_by_steps).to eq(180)
+      end
+    end
+
+    context 'first bravo then alfa' do
+      let(:wires) { [wire_bravo, wire_alfa] }
+
+      it 'returns distance to the intersection' do
+        expect(distance_to_the_closest_by_steps).to eq(180)
+      end
+    end
+  end
 end
