@@ -4,12 +4,15 @@ require 'crossed_wires/wire'
 
 module CrossedWires
   def part_1(input)
-    wires = input.split("\n")
-      .map { InputParser.new.extract_points(_1) }
-      .map { Wire.new(_1) }
-
+    wires = wires_from_input(input)
     IntersectionFinder.new.distance_to_the_closest_by_manhattan(*wires)
   end
 
   module_function :part_1
+
+  def self.wires_from_input(input)
+    input.split("\n")
+      .map { InputParser.new.extract_points(_1) }
+      .map { Wire.new(_1) }
+  end
 end

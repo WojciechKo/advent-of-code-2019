@@ -24,24 +24,30 @@ module CrossedWires
           raise "Part is not vertical nor horizontal #{wire_section}"
         end
       end
-
-      @vertical_sections.sort_by! { _1.begining.x }
-      @horizontal_sections.sort_by! { _1.begining.y }
     end
 
     class WireSection
-      def initialize(first, second)
-        @begining, @end = [first, second].sort
+      def initialize(begining, ending)
+        @begining = begining
+        @ending = ending
       end
 
-      attr_reader :begining, :end
+      attr_reader :begining, :ending
 
       def vertical?
-        begining.x == self.end.x
+        begining.x == ending.x
       end
 
       def horizontal?
-        begining.y == self.end.y
+        begining.y == ending.y
+      end
+
+      def x_range
+        Range.new(*[begining.x, ending.x].sort)
+      end
+
+      def y_range
+        Range.new(*[begining.y, ending.y].sort)
       end
     end
   end

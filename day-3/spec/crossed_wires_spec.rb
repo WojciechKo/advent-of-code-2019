@@ -1,11 +1,20 @@
 require 'crossed_wires'
 
 RSpec.describe CrossedWires do
+  shared_examples 'it works as expected' do |input:, output:|
+    let(:input)  { input }
+    let(:output) { output }
+
+    context "with input: #{input.inspect}" do
+      it { is_expected.to eq(output) }
+    end
+  end
+
   describe '::part_1' do
     subject { described_class.part_1(input) }
 
     context 'with input file' do
-      let(:input) { File.read('input-part1') }
+      let(:input) { File.read('input') }
 
       it 'writes output to the file' do
         File.write('output-part1', subject)
@@ -17,15 +26,6 @@ RSpec.describe CrossedWires do
     end
 
     context 'with provided examples' do
-      shared_examples 'it works as expected' do |input:, output:|
-        let(:input)  { input }
-        let(:output) { output }
-
-        context "with input: #{input.inspect}" do
-          it { is_expected.to eq(output) }
-        end
-      end
-
       it_behaves_like 'it works as expected',
                       input: "R75,D30,R83,U83,L12,D49,R71,U7,L72\nU62,R66,U55,R34,D71,R55,D58,R83",
                       output: 159

@@ -17,8 +17,8 @@ module CrossedWires
       intersections.reject { _1.x.zero? && _1.y.zero? }
     end
 
-    def distance_to_the_closest_by_manhattan(first_wire, second_wire)
-      all_intersections(first_wire, second_wire)
+    def distance_to_the_closest_by_manhattan(*wires)
+      all_intersections(*wires)
         .map!(&manhattan_distance)
         .min
     end
@@ -39,11 +39,11 @@ module CrossedWires
     end
 
     def covers_x?(horizontal)
-      ->(vertical) { (horizontal.begining.x..horizontal.end.x).cover?(vertical.begining.x) }
+      ->(vertical) { horizontal.x_range.cover?(vertical.begining.x) }
     end
 
     def covers_y?(horizontal)
-      ->(vertical) { (vertical.begining.y..vertical.end.y).cover?(horizontal.begining.y) }
+      ->(vertical) { vertical.y_range.cover?(horizontal.begining.y) }
     end
   end
 end

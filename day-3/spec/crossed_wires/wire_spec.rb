@@ -30,13 +30,13 @@ RSpec.describe CrossedWires::Wire do
     context 'case 1' do
       let(:points) { points_alfa }
 
-      it 'returns sorted horizontal parts of wire' do
-        expect(horizontal_sections).to match_array [
-          have_attributes(begining: have_attributes(x: -6, y: -5),
-                          end: have_attributes(x: 4, y: -5)),
+      it 'returns horizontal parts of wire' do
+        expect(horizontal_sections).to contain_exactly(
           have_attributes(begining: have_attributes(x: 0, y: 5),
-                          end: have_attributes(x: 4, y: 5))
-        ]
+                          ending: have_attributes(x: 4, y: 5)),
+          have_attributes(begining: have_attributes(x: 4, y: -5),
+                          ending: have_attributes(x: -6, y: -5))
+        )
       end
     end
 
@@ -44,12 +44,12 @@ RSpec.describe CrossedWires::Wire do
       let(:points) { points_bravo }
 
       it 'returns sorted horizontal parts of wire' do
-        expect(horizontal_sections).to match_array [
+        expect(horizontal_sections).to contain_exactly(
+          have_attributes(begining: have_attributes(x: 0, y: 0),
+                          ending: have_attributes(x: -4, y: 0)),
           have_attributes(begining: have_attributes(x: -4, y: -5),
-                          end: have_attributes(x: 6, y: -5)),
-          have_attributes(begining: have_attributes(x: -4, y: 0),
-                          end: have_attributes(x: 0, y: 0))
-        ]
+                          ending: have_attributes(x: 6, y: -5))
+        )
       end
     end
   end
@@ -57,29 +57,29 @@ RSpec.describe CrossedWires::Wire do
   describe '#vertical_sections' do
     subject(:vertical_sections) { wire.vertical_sections }
 
-    context 'case 1' do
+    context 'wire alfa' do
       let(:points) { points_alfa }
 
       it 'returns sorted vertical parts of wire' do
-        expect(vertical_sections).to match_array [
+        expect(vertical_sections).to contain_exactly(
           have_attributes(begining: have_attributes(x: 0, y: 0),
-                          end: have_attributes(x: 0, y: 5)),
-          have_attributes(begining: have_attributes(x: 4, y: -5),
-                          end: have_attributes(x: 4, y: 5))
-        ]
+                          ending: have_attributes(x: 0, y: 5)),
+          have_attributes(begining: have_attributes(x: 4, y: 5),
+                          ending: have_attributes(x: 4, y: -5))
+        )
       end
     end
 
-    context 'case 2' do
+    context 'wire bravo' do
       let(:points) { points_bravo }
 
       it 'returns vertical parts of wire' do
-        expect(vertical_sections).to match_array [
-          have_attributes(begining: have_attributes(x: -4, y: -5),
-                          end: have_attributes(x: -4, y: 0)),
+        expect(vertical_sections).to contain_exactly(
+          have_attributes(begining: have_attributes(x: -4, y: 0),
+                          ending: have_attributes(x: -4, y: -5)),
           have_attributes(begining: have_attributes(x: 6, y: -5),
-                          end: have_attributes(x: 6, y: 5))
-        ]
+                          ending: have_attributes(x: 6, y: 5))
+        )
       end
     end
   end
