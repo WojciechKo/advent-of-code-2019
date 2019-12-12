@@ -1,3 +1,5 @@
+require 'intcode_computer/operations_factory'
+
 module IntcodeComputer
   class OpcodeIterator
     def initialize(memory)
@@ -8,8 +10,11 @@ module IntcodeComputer
     include Enumerable
 
     def each
-      loop do
-        yield(self) || return
+      loop { yield(next_operation) || return }
+    end
+
+    def next_operation
+      operations_factory.from_iterator(self).tap do
         move_index
       end
     end
@@ -28,6 +33,10 @@ module IntcodeComputer
 
     def move_index
       @index += 4
+    end
+
+    def operations_factory
+      @operations_factory ||= OperationsFactory.new(@memory)
     end
   end
 end
