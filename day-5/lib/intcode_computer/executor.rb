@@ -2,13 +2,15 @@ require 'intcode_computer/opcode_iterator'
 
 module IntcodeComputer
   class Executor
-    def initialize(memory)
-      @memory = memory
+    def initialize(intcode)
+      @intcode = intcode.dup
     end
 
     def execute
-      OpcodeIterator.new(@memory).each(&:execute)
-      @memory
+      OpcodeIterator.new(@intcode)
+        .take_while { |operation| operation.call(@intcode) }
+
+      @intcode
     end
   end
 end

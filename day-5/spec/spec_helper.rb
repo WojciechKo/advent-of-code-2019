@@ -88,11 +88,40 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = :random
+  # config.order = :random
 
   # Seed global randomization in this process using the `--seed` CLI option.
   # Setting this allows you to use `--seed` to deterministically reproduce
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+end
+
+require 'stringio'
+
+module IoTestHelpers
+  def simulate_stdin(*inputs)
+    io = StringIO.new
+    inputs.flatten.each { |str| io.puts(str) }
+    io.rewind
+
+    actual_stdin = $stdin
+    $stdin = io
+    yield
+  ensure
+    $stdin = actual_stdin
+  end
+
+  def with_captured_stdout
+    original_stdout = $stdout  # capture previous value of $stdout
+    $stdout = StringIO.new     # assign a string buffer to $stdout
+    yield                      # perform the body of the user code
+    $stdout.string             # return the contents of the string buffer
+  ensure
+    $stdout = original_stdout  # restore $stdout to its previous value
+  end
+end
+
+RSpec.configure do |config|
+  config.include IoTestHelpers
 end
