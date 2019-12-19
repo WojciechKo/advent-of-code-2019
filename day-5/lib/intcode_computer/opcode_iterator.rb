@@ -19,8 +19,7 @@ module IntcodeComputer
 
         yield(operation)
 
-        offset = operation.required_args + 1
-        move_index(offset)
+        @index = operation.next_index(@index)
       end
     end
 
@@ -29,10 +28,6 @@ module IntcodeComputer
     def next_operation
       return unless @index < @intcode.size
 
-      build_operation
-    end
-
-    def build_operation
       operation_type = operation_type_from(current_opcode)
       args = current_args.take(operation_type.required_args).to_a
 
@@ -55,6 +50,8 @@ module IntcodeComputer
       OperationType::Multiplication,
       OperationType::Read,
       OperationType::Print,
+      OperationType::LessThan,
+      OperationType::Equals,
       OperationType::Terminate
     ].freeze
 

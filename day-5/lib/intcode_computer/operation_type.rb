@@ -43,6 +43,18 @@ module IntcodeComputer
       store_output: false
     )
 
+    LessThan = OperationType.new(
+      opcode: 7,
+      operation: ->(a, b) { a < b ? 1 : 0 },
+      store_output: true
+    )
+
+    Equals = OperationType.new(
+      opcode: 8,
+      operation: ->(a, b) { a == b ? 1 : 0 },
+      store_output: true
+    )
+
     Terminate = OperationType.new(
       opcode: 99,
       operation: -> {},

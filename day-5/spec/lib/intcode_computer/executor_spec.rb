@@ -10,9 +10,11 @@ RSpec.describe IntcodeComputer::Executor do
     let(:outputs) { args[:outputs] }
 
     context "with intcodes: #{args[:intcodes_in].inspect}" do
-      it do
-        simulate_stdin(*inputs) do
-          expect(execute).to eq(intcodes_out)
+      if args[:intcodes_out]
+        it do
+          simulate_stdin(*inputs) do
+            expect(execute).to eq(intcodes_out)
+          end
         end
       end
 
@@ -51,4 +53,64 @@ RSpec.describe IntcodeComputer::Executor do
                   inputs: ['69'],
                   intcodes_out: [69, 0, 4, 0, 99],
                   outputs: "69\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8],
+                  inputs: ['7'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8],
+                  inputs: ['8'],
+                  outputs: "1\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8],
+                  inputs: ['9'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8],
+                  inputs: ['7'],
+                  outputs: "1\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8],
+                  inputs: ['8'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8],
+                  inputs: ['9'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1108, -1, 8, 3, 4, 3, 99],
+                  inputs: ['7'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1108, -1, 8, 3, 4, 3, 99],
+                  inputs: ['8'],
+                  outputs: "1\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1108, -1, 8, 3, 4, 3, 99],
+                  inputs: ['9'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1107, -1, 8, 3, 4, 3, 99],
+                  inputs: ['7'],
+                  outputs: "1\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1107, -1, 8, 3, 4, 3, 99],
+                  inputs: ['8'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1107, -1, 8, 3, 4, 3, 99],
+                  inputs: ['9'],
+                  outputs: "0\n"
 end
