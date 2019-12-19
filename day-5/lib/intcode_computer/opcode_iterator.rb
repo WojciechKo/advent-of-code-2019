@@ -11,7 +11,17 @@ module IntcodeComputer
     end
 
     def each
-      loop { yield(next_operation || return) }
+      return enum_for(:each) unless block_given?
+
+      loop do
+        operation = next_operation
+        break unless operation
+
+        yield(operation)
+
+        offset = operation.required_args + 1
+        move_index(offset)
+      end
     end
 
     private
@@ -19,10 +29,7 @@ module IntcodeComputer
     def next_operation
       return unless @index < @intcode.size
 
-      build_operation.tap do |operation|
-        offset = operation.required_args + 1
-        move_index(offset)
-      end
+      build_operation
     end
 
     def build_operation

@@ -2,19 +2,32 @@ require 'intcode_computer/opcode_iterator'
 
 RSpec.describe IntcodeComputer::OpcodeIterator do
   subject(:iterator) { described_class.new(intcode) }
+  subject(:enumerator) { iterator.each }
+
+  describe 'enumeration' do
+    let(:intcode) { [1, 0, 0, 0] }
+
+    it 'raises an exception when want to exceed enumerator' do
+      expect(enumerator.next).to have_attributes(
+        opcode: 1,
+        args: match_array([0, 0, 0]),
+        args_modes: match_array([0, 0])
+      )
+
+      expect { enumerator.next }.to raise_error(StopIteration)
+    end
+  end
 
   describe 'reading args modes' do
     context 'without provided args modes' do
       let(:intcode) { [1, 0, 0, 0] }
 
       it 'Uses 0 as default' do
-        expect(iterator.first).to have_attributes(
+        expect(enumerator.next).to have_attributes(
           opcode: 1,
           args: match_array([0, 0, 0]),
           args_modes: match_array([0, 0])
         )
-
-        expect(iterator.first).to be_nil
       end
     end
 
@@ -22,13 +35,11 @@ RSpec.describe IntcodeComputer::OpcodeIterator do
       let(:intcode) { [101, 0, 0, 0] }
 
       it 'sets that mode for the first argument' do
-        expect(iterator.first).to have_attributes(
+        expect(enumerator.next).to have_attributes(
           opcode: 1,
           args: match_array([0, 0, 0]),
           args_modes: match_array([1, 0])
         )
-
-        expect(iterator.first).to be_nil
       end
     end
 
@@ -37,7 +48,7 @@ RSpec.describe IntcodeComputer::OpcodeIterator do
         let(:intcode) { [1101, 0, 0, 0] }
 
         it 'sets mode for the both of the arguments' do
-          expect(iterator.first).to have_attributes(
+          expect(enumerator.next).to have_attributes(
             opcode: 1,
             args: match_array([0, 0, 0]),
             args_modes: match_array([1, 1])
@@ -49,7 +60,7 @@ RSpec.describe IntcodeComputer::OpcodeIterator do
         let(:intcode) { [1001, 0, 0, 0] }
 
         it 'sets mode for the both of the arguments' do
-          expect(iterator.first).to have_attributes(
+          expect(enumerator.next).to have_attributes(
             opcode: 1,
             args: match_array([0, 0, 0]),
             args_modes: match_array([0, 1])
@@ -62,7 +73,7 @@ RSpec.describe IntcodeComputer::OpcodeIterator do
       let(:intcode) { [10101, 0, 0, 0] }
 
       it 'its being ignored' do
-        expect(iterator.first).to have_attributes(
+        expect(enumerator.next).to have_attributes(
           opcode: 1,
           args: match_array([0, 0, 0]),
           args_modes: match_array([1, 0])
