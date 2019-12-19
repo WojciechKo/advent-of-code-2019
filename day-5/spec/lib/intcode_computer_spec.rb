@@ -1,7 +1,7 @@
 require 'intcode_computer'
 
 RSpec.describe IntcodeComputer do
-  fdescribe '::part_1' do
+  describe '::part_1' do
     subject do
       simulate_stdin('1') do
         described_class.part_1(input)

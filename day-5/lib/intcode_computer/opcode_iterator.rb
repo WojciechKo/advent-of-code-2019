@@ -37,15 +37,19 @@ module IntcodeComputer
     end
 
     def operation_type_from(opcode)
-      case opcode
-      when 1 then OperationType::Addition
-      when 2 then OperationType::Multiplication
-      when 3 then OperationType::Read
-      when 4 then OperationType::Print
-      when 99 then OperationType::Terminate
-      else raise "Unexpected opcode: #{opcode.inspect}"
-      end
+      operation_type = SUPPORTED_OPERATIONS.find { _1.opcode == opcode }
+      raise "Unexpected opcode: #{opcode.inspect}" unless operation_type
+
+      operation_type
     end
+
+    SUPPORTED_OPERATIONS = [
+      OperationType::Addition,
+      OperationType::Multiplication,
+      OperationType::Read,
+      OperationType::Print,
+      OperationType::Terminate
+    ].freeze
 
     def current_opcode
       (instruction % 100)
