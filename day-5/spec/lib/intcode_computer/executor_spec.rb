@@ -113,4 +113,24 @@ RSpec.describe IntcodeComputer::Executor do
                   intcodes_in: [3, 3, 1107, -1, 8, 3, 4, 3, 99],
                   inputs: ['9'],
                   outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9],
+                  inputs: ['0'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9],
+                  inputs: ['420'],
+                  outputs: "1\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1],
+                  inputs: ['0'],
+                  outputs: "0\n"
+
+  it_behaves_like 'it works as expected',
+                  intcodes_in: [3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1],
+                  inputs: ['420'],
+                  outputs: "1\n"
 end

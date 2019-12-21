@@ -1,5 +1,6 @@
 require 'intcode_computer/operation'
 require 'intcode_computer/operation_type'
+require 'intcode_computer/operation_type_factory'
 
 module IntcodeComputer
   class OpcodeIterator
@@ -19,7 +20,7 @@ module IntcodeComputer
 
         yield(operation)
 
-        @index = operation.next_index(@index)
+        move_index!(operation)
       end
     end
 
@@ -39,21 +40,29 @@ module IntcodeComputer
     end
 
     def operation_type_from(opcode)
-      operation_type = SUPPORTED_OPERATIONS.find { _1.opcode == opcode }
+      operation_type = supported_operations.find { _1.opcode == opcode }
       raise "Unexpected opcode: #{opcode.inspect}" unless operation_type
 
       operation_type
     end
 
-    SUPPORTED_OPERATIONS = [
-      OperationType::Addition,
-      OperationType::Multiplication,
-      OperationType::Read,
-      OperationType::Print,
-      OperationType::LessThan,
-      OperationType::Equals,
-      OperationType::Terminate
-    ].freeze
+    def supported_operations
+      @supported_operations ||= [
+        OperationType::Addition,
+        OperationType::Multiplication,
+        OperationType::Read,
+        OperationType::Print,
+        OperationType::LessThan,
+        OperationType::Equals,
+        OperationTypeFactory.jump_if_true(index_setter),
+        OperationTypeFactory.jump_if_false(index_setter),
+        OperationType::Terminate
+      ]
+    end
+
+    def index_setter
+      ->(index) { @jump_to = index }
+    end
 
     def current_opcode
       (instruction % 100)
@@ -73,8 +82,8 @@ module IntcodeComputer
         .map { @intcode[@index + _1] }
     end
 
-    def move_index(offset)
-      @index += offset
+    def move_index(operation)
+      @index += operation.required_args + 1
     end
   end
 end

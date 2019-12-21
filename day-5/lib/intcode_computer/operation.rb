@@ -22,10 +22,6 @@ module IntcodeComputer
 
     attr_reader :args, :args_modes
 
-    def next_index(index)
-      index + required_args + 1
-    end
-
     private
 
     def build_args_modes(args_modes)
